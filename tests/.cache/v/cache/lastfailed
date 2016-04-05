@@ -1,0 +1,13 @@
+{
+  "resources/test_base.py::TestBaseComponentClient::()::test_handle_request_no_error": true,
+  "resources/test_base.py::TestBaseComponentClient::()::test_init": true,
+  "resources/test_base.py::TestBaseComponentClient::()::test_make_url[?x=y-http://xxx.yyy/aaa?x=y]": true,
+  "resources/test_base.py::TestBaseComponentClient::()::test_make_url[hello/world-http://xxx.yyy/hello/world]": true,
+  "resources/test_base.py::TestComponentClientError::()::test_from_response": true,
+  "resources/test_base.py::TestComponentClientError::()::test_from_response_json": true,
+  "resources/test_base.py::TestComponentClientError::()::test_from_response_no_content_type": true,
+  "resources/test_base.py::TestComponentClientError::()::test_init": true,
+  "resources/test_base.py::TestComponentClientError::()::test_init_with_json_data": true,
+  "resources/test_base.py::TestComponentClientError::()::test_repr": true,
+  "resources/test_base.py::TestComponentClientError::()::test_str": true
+}
