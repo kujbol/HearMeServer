@@ -3,7 +3,7 @@ import logging
 from mongoengine import connect
 from mongoengine.connection import disconnect
 
-log = logging.getLevelName(__name__)
+log = logging.getLogger(__name__)
 
 
 class MongoConnectorFactoryError(Exception):
@@ -15,23 +15,24 @@ class MongoConnectorFactory:
         if conf is None:
             raise MongoConnectorFactoryError("missing configuration of mongo")
         try:
-            self.host = conf['host']
-            self.db_name = conf['db_name']
+            self.host = conf['HOST']
+            self.db_name = conf['DB_NAME']
+            self.port = conf['PORT']
         except KeyError as error:
             raise MongoConnectorFactoryError(
                 "missing parameter in configuration: {}".format(error)
             )
 
     def build(self):
-        return MongoConnector(self.host, self.db_name)
+        return MongoConnector(self.host, self.db_name, self.port)
 
 
 class MongoConnector:
     def __init__(
-            self, host, db_name, username=None, password=None,
-            port=None, db_alias=None,
+            self, host, db_name, port, username=None, password=None,
+            db_alias=None,
     ):
-        self.db_alias = db_alias or 'local'
+        self.db_alias = db_alias or 'default'
         self.db_name = db_name
         self.mongo_conf = {
             'host': host,
@@ -54,5 +55,3 @@ class MongoConnector:
         msg = 'leaving MongoConnector with db_alias {}'
         log.debug(msg.format(self.db_alias))
         disconnect(self.db_alias)
-
-

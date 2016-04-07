@@ -8,4 +8,5 @@ class Conversation(EmbeddedDocument):
 class Message(EmbeddedDocument):
     text = StringField()
     send_date = DateTimeField()
+    sender = StringField()
 

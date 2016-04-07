@@ -1,9 +1,7 @@
-from hear_me.libs.services import service_registry
+from hear_me.models.base import BaseDocument
 from hear_me.models.music import Music
 from mongoengine import (
     DateTimeField,
-    Document,
-    DoesNotExist,
     EmbeddedDocumentField,
     ListField,
     MapField,
@@ -16,7 +14,7 @@ from mongoengine import (
 from hear_me.models.message import Message
 
 
-class User(Document):
+class User(BaseDocument):
     id = StringField(primary_key=True)
     email = StringField()
     token = StringField()
@@ -32,16 +30,6 @@ class User(Document):
     meta = {
 
     }
-
-    def to_dict(self):
-        return self.to_mongo().to_dict()
-
-    @classmethod
-    def get_by_id(cls, id):
-        try:
-            return cls.objects.get(id=id)
-        except DoesNotExist:
-            return None
 
     @classmethod
     def from_spotify(cls, spotify_data):

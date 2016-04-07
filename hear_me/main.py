@@ -1,6 +1,8 @@
 import sys
 
 from flask import Flask
+from elasticsearch import Elasticsearch
+
 
 from hear_me.libs.mongo import MongoConnectorFactory
 from hear_me.libs.services import service_registry
@@ -30,6 +32,10 @@ def init_services(settings):
     @service_registry.service
     def spotify_connector():
         return SpotifyConnectorFactory(config=settings.SpotifySettings).build()
+
+    @service_registry.service
+    def elastic_client():
+        return Elasticsearch()
 
 
 def load_settings():

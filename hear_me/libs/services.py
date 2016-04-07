@@ -2,7 +2,7 @@ import inspect
 
 
 class ServiceRegistry(object):
-    """Basic global services registry singleton implementation."""
+    """Basic global services registry implementation."""
 
     def __init__(self):
         self.services = AtDict()
@@ -33,3 +33,5 @@ class AtDict(dict):
     __getattr__ = dict.__getitem__
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
+
+service_registry = ServiceRegistry()
