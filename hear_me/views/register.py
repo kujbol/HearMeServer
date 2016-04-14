@@ -9,7 +9,6 @@ register = Blueprint('register', __name__)
 schema = UserRegisterSchema()
 
 
-# TODO add schema decorator to valid json and throw error
 @register.route('/v1/register', methods=['PUT'])
 def post_register():
     token = request.headers.get('token')

@@ -1,8 +1,10 @@
-from mongoengine import EmbeddedDocument, ListField, StringField, DateTimeField
-
-
-class Conversation(EmbeddedDocument):
-    messages = ListField()
+from mongoengine import (
+    DateTimeField,
+    EmbeddedDocument,
+    EmbeddedDocumentField,
+    ListField,
+    StringField,
+)
 
 
 class Message(EmbeddedDocument):
@@ -10,3 +12,6 @@ class Message(EmbeddedDocument):
     send_date = DateTimeField()
     sender = StringField()
 
+
+class Conversation(EmbeddedDocument):
+    messages = ListField(EmbeddedDocumentField(Message))

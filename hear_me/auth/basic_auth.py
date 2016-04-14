@@ -5,11 +5,12 @@ from hear_me.libs.services import service_registry
 from hear_me.models.user import User
 from hear_me.resources.base import ClientError
 
-auth = HTTPTokenAuth()
+auth = HTTPTokenAuth('Bearer')
 
 
 @auth.verify_token
 def verify_token(token):
+    g.user = None
     try:
         data = service_registry.services.spotify_connector.me(token)
         with service_registry.services.mongo_connector:

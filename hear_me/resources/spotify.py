@@ -13,6 +13,7 @@ class SpotifyConnectorFactory:
         )
 
 
+# TODO add formatter
 class SpotifyConnector(BaseClient):
     def __init__(self, spotify_api_url):
         super().__init__(spotify_api_url)

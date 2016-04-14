@@ -9,5 +9,4 @@ login = Blueprint('login', __name__, url_prefix='/v1/login')
 @login.route('/', methods=['GET'])
 @auth.login_required
 def login_token():
-    data = service_registry.services.spotify_connector.me(g.user.token)
-    return jsonify(data)
+    return jsonify(g.user.to_dict())
