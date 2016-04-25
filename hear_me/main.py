@@ -10,16 +10,14 @@ from hear_me.resources.spotify import SpotifyConnectorFactory
 from hear_me.settings import defaults as config
 
 # BluePrints
-from hear_me.views.login import login
-from hear_me.views.register import register
+from hear_me.views.user import user
 
 
 def init_app(settings):
     app = Flask(__name__)
     app.config.from_object(settings.FlaskConfig)
     app.debug = True
-    app.register_blueprint(register)
-    app.register_blueprint(login)
+    app.register_blueprint(user)
 
     return app
 

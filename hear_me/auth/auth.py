@@ -1,14 +1,12 @@
 from flask import g
-from flask_httpauth import HTTPTokenAuth
+from flask.ext.httpauth import HTTPTokenAuth
 
+from hear_me.auth.token_auth import TokenAuth
 from hear_me.libs.services import service_registry
 from hear_me.models.user import User
 from hear_me.resources.base import ClientError
 
-auth = HTTPTokenAuth('Bearer')
 
-
-@auth.verify_token
 def verify_token(token):
     g.user = None
     try:
@@ -23,3 +21,5 @@ def verify_token(token):
             return False
     except ClientError:
         return False
+
+auth = TokenAuth(verify_token, scheme='token')

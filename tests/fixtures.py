@@ -22,6 +22,7 @@ def fixt_user():
     return User(
         id='kujbol',
         birth_date=datetime(1994, 11, 6, 0, 0, 0),
+        image_url='http://some.fake.url/img.jpg',
         country='PL',
         email='kujbol@gmail.com',
         is_active=False,
