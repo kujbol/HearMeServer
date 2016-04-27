@@ -1,5 +1,4 @@
 from flask import g
-from flask.ext.httpauth import HTTPTokenAuth
 
 from hear_me.auth.token_auth import TokenAuth
 from hear_me.libs.services import service_registry

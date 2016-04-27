@@ -44,8 +44,11 @@ def load_settings():
         return None
 
 
-if __name__ == '__main__':
+def get_app():
     settings = load_settings()
     app = init_app(settings)
     init_services(settings)
-    app.run()
+    return app
+
+
+application = get_app()
