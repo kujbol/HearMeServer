@@ -22,7 +22,6 @@ class User(BaseDocument):
     email = StringField()
     last_known_position = PointField()
     image_url = StringField()
-    # nick_name = StringField() ADD FORMATTER !!
     token = StringField()
 
     # Flags

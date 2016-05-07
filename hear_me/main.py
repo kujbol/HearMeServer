@@ -38,10 +38,7 @@ def init_services(settings):
 
 def load_settings():
     # TODO add reasonable loading settings
-    if len(sys.argv) == 1:
-        return config
-    else:
-        return None
+    return config
 
 
 def get_app():

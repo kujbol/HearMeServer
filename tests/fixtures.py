@@ -60,21 +60,29 @@ def fixt_service_registry(spotify_me_data):
 
 @pytest.fixture()
 def spotify_me_data():
+    """ It is the same data as in user fixture, TODO add user generator
+    """
     return {
         "birthdate": "1994-11-06",
         "country": "PL",
         "display_name": None,
         "email": "kujbol@gmail.com",
         "external_urls": {
-            "spotify": "https://open.spotify.com/user/kujbol"
+            "spotify": "https://open.spotify.com/user/kujbol",
         },
         "followers": {
             "href": None,
-            "total": 0
+            "total": 0,
         },
         "href": "https://api.spotify.com/v1/users/kujbol",
         "id": "kujbol",
-        "images": [],
+        "images": [
+            {
+                "height": None,
+                "url": "http://some.fake.url/img.jpg",
+                "width": None,
+            }
+        ],
         "product": "premium",
         "type": "user",
         "uri": "spotify:user:kujbol"
