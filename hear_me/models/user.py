@@ -1,9 +1,8 @@
-from hear_me.models.base import BaseDocument
-from hear_me.models.music import Music
 from mongoengine import (
     BooleanField,
     DateTimeField,
     EmbeddedDocumentField,
+    EmbeddedDocument,
     ListField,
     MapField,
     PointField,
@@ -12,7 +11,21 @@ from mongoengine import (
     StringField,
 )
 
+from hear_me.models.base import BaseDocument
 from hear_me.models.message import Message
+from hear_me.models.music import Music
+
+
+gender = ['male', 'female']
+
+
+class Settings(EmbeddedDocument):
+    male = StringField(choices=gender)
+    languages = ListField()
+
+
+class Preferences(EmbeddedDocument):
+    male = ListField(StringField(choices=gender))
 
 
 class User(BaseDocument):
@@ -23,6 +36,7 @@ class User(BaseDocument):
     last_known_position = PointField()
     image_url = StringField()
     token = StringField()
+    settings = EmbeddedDocumentField(Settings)
 
     # Flags
     is_active = BooleanField(required=True)
