@@ -11,15 +11,19 @@ from hear_me.settings import defaults as config
 
 # BluePrints
 from hear_me.views.user import user
+from hear_me.views.settings import settings
 
 
 def init_app(settings):
     app = Flask(__name__)
     app.config.from_object(settings.FlaskConfig)
     app.debug = True
-    app.register_blueprint(user)
-
     return app
+
+
+def register_blueprints(app):
+    app.register_blueprint(user)
+    app.register_blueprint(settings)
 
 
 def init_services(settings):
@@ -38,15 +42,13 @@ def init_services(settings):
 
 def load_settings():
     # TODO add reasonable loading settings
-    if len(sys.argv) == 1:
-        return config
-    else:
-        return None
+    return config
 
 
 def get_app():
     settings = load_settings()
     app = init_app(settings)
+    register_blueprints(app)
     init_services(settings)
     return app
 
