@@ -4,7 +4,6 @@ from colander import(
     Range,
     SchemaNode,
     SequenceSchema,
-    String,
 )
 
 from hear_me.models.user import available_gender
