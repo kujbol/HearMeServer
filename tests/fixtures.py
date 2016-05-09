@@ -7,7 +7,11 @@ from mongoengine.connection import connect
 from hear_me.libs.mongo import MongoConnectorFactory
 from hear_me.libs.services import service_registry
 from hear_me.main import init_app, register_blueprints
-from hear_me.models.user import User
+from hear_me.models.user import (
+    User,
+    SearchSettings,
+    SearchPreferences,
+)
 from hear_me.resources.spotify import SpotifyConnector
 from hear_me.settings import defaults as settings
 
@@ -20,13 +24,34 @@ def app():
 
 
 @pytest.fixture()
-def fixt_user():
+def fixt_search_settings():
+    return SearchSettings(
+        gender='male',
+        languages=['polish', 'english']
+    )
+
+
+@pytest.fixture()
+def fixt_search_preferences():
+    return SearchPreferences(
+        genders=['male', 'female'],
+        languages=['polish', 'english'],
+        age_range_low=17,
+        age_range_top=50,
+        is_in_same_country=False,
+    )
+
+
+@pytest.fixture()
+def fixt_user(fixt_search_settings, fixt_search_preferences):
     return User(
         id='kujbol',
         birth_date=datetime(1994, 11, 6, 0, 0, 0),
         image_url='http://some.fake.url/img.jpg',
         country='PL',
         email='kujbol@gmail.com',
+        search_preferences=fixt_search_preferences,
+        search_settings=fixt_search_settings,
         is_active=False,
         favorite_music=[],
         square=[],
