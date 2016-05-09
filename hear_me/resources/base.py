@@ -7,7 +7,7 @@ log = logging.getLogger(__name__)
 
 
 class ClientError(HTTPException):
-    """Exception for BaseComponentClient errors."""
+    """Exception for Service errors."""
 
     def __init__(self, resource, code, text):
         super().__init__(

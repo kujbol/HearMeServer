@@ -6,7 +6,7 @@ from mongoengine.connection import connect
 
 from hear_me.libs.mongo import MongoConnectorFactory
 from hear_me.libs.services import service_registry
-from hear_me.main import init_app
+from hear_me.main import init_app, register_blueprints
 from hear_me.models.user import User
 from hear_me.resources.spotify import SpotifyConnector
 from hear_me.settings import defaults as settings
@@ -14,7 +14,9 @@ from hear_me.settings import defaults as settings
 
 @pytest.fixture()
 def app():
-    return init_app(settings).test_client()
+    test_app = init_app(settings)
+    register_blueprints(test_app)
+    return test_app.test_client()
 
 
 @pytest.fixture()
