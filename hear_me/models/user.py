@@ -1,9 +1,9 @@
-from hear_me.models.base import BaseDocument
-from hear_me.models.music import Music
 from mongoengine import (
     BooleanField,
     DateTimeField,
     EmbeddedDocumentField,
+    EmbeddedDocument,
+    IntField,
     ListField,
     MapField,
     PointField,
@@ -12,7 +12,35 @@ from mongoengine import (
     StringField,
 )
 
+from hear_me.models.base import BaseDocument
 from hear_me.models.message import Message
+from hear_me.models.music import Music
+from hear_me.utils.i18n import available_languages
+
+
+available_gender = ['male', 'female']
+
+
+class SearchSettings(EmbeddedDocument):
+    gender = StringField(choices=available_gender)
+    languages = ListField(StringField(choices=available_languages))
+
+    def is_ready(self):
+        return self.gender and len(self.languages)
+
+
+class SearchPreferences(EmbeddedDocument):
+    genders = ListField(StringField(choices=available_gender))
+    languages = ListField(StringField(choices=available_languages))
+    age_range_low = IntField(min_value=1, max_value=99)
+    age_range_top = IntField(min_value=1, max_value=99)
+    is_in_same_country = BooleanField()
+
+    def is_ready(self):
+        return (
+            self.genders and len(self.languages) and
+            self.age_range_low and self.age_range_top
+        )
 
 
 class User(BaseDocument):
@@ -22,8 +50,11 @@ class User(BaseDocument):
     email = StringField()
     last_known_position = PointField()
     image_url = StringField()
-    # nick_name = StringField() ADD FORMATTER !!
     token = StringField()
+
+    # Search
+    search_settings = EmbeddedDocumentField(SearchSettings)
+    search_preferences = EmbeddedDocumentField(SearchPreferences)
 
     # Flags
     is_active = BooleanField(required=True)
@@ -38,6 +69,15 @@ class User(BaseDocument):
         'collection': 'User'
     }
 
+    def can_be_activated(self):
+        return (
+            self.search_settings.is_ready() and
+            self.search_preferences.is_ready()
+        )
+
+    def active(self):
+        self.is_active = True
+
     @classmethod
     def from_spotify(cls, spotify_data):
         images = spotify_data['images']
@@ -50,4 +90,3 @@ class User(BaseDocument):
             image_url=image_url,
             is_active=False,
         )
-

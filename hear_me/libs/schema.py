@@ -10,7 +10,7 @@ def deserialize_schema(schema):
             try:
                 deserialized = schema.deserialize(request.json)
             except colander.Invalid as e:
-                return jsonify({"error": e.message}), 400
+                return jsonify({"schema_error": e.asdict()}), 400
             return f(deserialized, *args, **kwargs)
         return wrapper
     return decorator

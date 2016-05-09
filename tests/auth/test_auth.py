@@ -3,9 +3,10 @@ from mock import patch
 
 from hear_me.auth.auth import verify_token
 
+
 @pytest.mark.usefixtures('mongo')
 @patch('hear_me.auth.auth.g')
-def test_verify_token_OK(mock_g, fixt_service_registry, fixt_user):
+def test_verify_token_ok(mock_g, fixt_service_registry, fixt_user):
     token = 'fake token'
     fixt_user.save()
 
