@@ -12,6 +12,7 @@ from mongoengine import (
     StringField,
 )
 
+from hear_me.libs.services import service_registry
 from hear_me.models.base import BaseDocument
 from hear_me.models.message import Message
 from hear_me.models.music import Music
@@ -43,8 +44,16 @@ class SearchPreferences(EmbeddedDocument):
         )
 
 
+class Square(EmbeddedDocument):
+    energy = EmbeddedDocumentField(Music)
+    sadness = EmbeddedDocumentField(Music)
+    relax = EmbeddedDocumentField(Music)
+    top = EmbeddedDocumentField(Music)
+
+
 class User(BaseDocument):
     id = StringField(primary_key=True)
+    visible_name = StringField()
     birth_date = DateTimeField()
     country = StringField()
     email = StringField()
@@ -60,10 +69,9 @@ class User(BaseDocument):
     is_active = BooleanField(required=True)
 
     # Music
-    favorite_music = ListField(ReferenceField(Music, reverse_delete_rule=PULL))
     friends = ListField(ReferenceField('self', reverse_delete_rule=PULL))
     messages = MapField(EmbeddedDocumentField(Message))
-    square = ListField(ReferenceField(Music, reverse_delete_rule=PULL))
+    square = EmbeddedDocumentField(Square)
 
     meta = {
         'collection': 'User'
@@ -77,6 +85,14 @@ class User(BaseDocument):
 
     def active(self):
         self.is_active = True
+
+    def get_next_user_id(self):
+        # TODO change this mock for something reasonable -> send data to elastic
+        with service_registry.services.mongo_connector:
+            for user in User.objects():
+                if user.id != self.id:
+                    return user.id
+            return self.id
 
     @classmethod
     def from_spotify(cls, spotify_data):

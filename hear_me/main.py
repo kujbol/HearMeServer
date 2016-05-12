@@ -12,6 +12,7 @@ from hear_me.settings import defaults as config
 # BluePrints
 from hear_me.views.user import user
 from hear_me.views.settings import settings
+from hear_me.views.next_user import next_user
 
 
 def init_app(settings):
@@ -24,6 +25,7 @@ def init_app(settings):
 def register_blueprints(app):
     app.register_blueprint(user)
     app.register_blueprint(settings)
+    app.register_blueprint(next_user)
 
 
 def init_services(settings):
