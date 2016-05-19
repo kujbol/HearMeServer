@@ -17,7 +17,7 @@ from mongoengine import (
 
 from hear_me.libs.services import service_registry
 from hear_me.models.base import BaseDocument
-from hear_me.models.message import Message
+from hear_me.models.message import Conversation
 from hear_me.models.music import Music, MusicType
 from hear_me.utils.i18n import available_languages
 
@@ -91,7 +91,7 @@ class Square(EmbeddedDocument):
 
 class User(BaseDocument):
     id = StringField(primary_key=True)
-    visible_name = StringField()
+    display_name = StringField()
     birth_date = DateTimeField()
     country = StringField()
     email = StringField()
@@ -108,7 +108,7 @@ class User(BaseDocument):
 
     # Music
     friends = ListField(ReferenceField('self', reverse_delete_rule=PULL))
-    messages = MapField(EmbeddedDocumentField(Message))
+    messages = MapField(EmbeddedDocumentField(Conversation))
     square = EmbeddedDocumentField(Square)
 
     meta = {
@@ -139,6 +139,7 @@ class User(BaseDocument):
         return cls(
             id=spotify_data['id'],
             email=spotify_data['email'],
+            display_name=spotify_data['display_name'],
             country=spotify_data['country'],
             birth_date=spotify_data['birthdate'],
             image_url=image_url,

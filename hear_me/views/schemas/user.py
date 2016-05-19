@@ -8,3 +8,4 @@ class UserSchema(colander.MappingSchema):
     image_url = colander.SchemaNode(NullableString())
     is_active = colander.SchemaNode(Boolean())
     email = colander.SchemaNode(colander.String())
+    display_name = colander.SchemaNode(colander.String())

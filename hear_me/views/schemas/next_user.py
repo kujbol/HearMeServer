@@ -17,7 +17,7 @@ class SquareSchema(MappingSchema):
 class NextUserSchema(MappingSchema):
     _id = SchemaNode(String())
     image_url = SchemaNode(NullableString())
-    visible_name = SchemaNode(NullableString())
+    display_name = SchemaNode(NullableString())
 
     square = SquareSchema()
 
