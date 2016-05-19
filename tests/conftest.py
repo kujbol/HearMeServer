@@ -1,6 +1,8 @@
 from tests.fixtures import (
     app,
     fixt_user,
+    fixt_music,
+    fixt_square,
     fixt_service_registry,
     fixt_mongo_connector,
     fixt_search_preferences,

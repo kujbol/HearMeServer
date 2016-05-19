@@ -43,15 +43,6 @@ class BaseClient(object):
     def handle_request(
             self, request, url_suffix, *args, **kwargs
     ):
-        """
-        Wraps request method call.
-        :param request: some method from requests package, like post or get
-        :param url_suffix: together with api_url it forms url to which you make
-            a call
-        :param args, kwargs: args and kwargs are passed straight to request as
-            params
-        :return: response.json() or raise an ERROR_CLASS error if some occurs
-        """
         resource_url = self.make_url(url_suffix)
         try:
             response = request(resource_url, *args, **kwargs)

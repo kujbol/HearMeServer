@@ -1,6 +1,8 @@
 import requests
 
 from hear_me.resources.base import BaseClient
+from hear_me.resources.formatters.features import FormatFeaturesTracks
+from hear_me.resources.formatters.top import FormatTopTracks
 
 
 class SpotifyConnectorFactory:
@@ -27,8 +29,25 @@ class SpotifyConnector(BaseClient):
             requests.get, url_suffix, headers=self.headers(token)
         )
 
-    def top(self, token, top_type):
-        url_suffix = '/top/' + top_type
-        return self.make_call(
-            requests.get, url_suffix, headers=self.headers(token)
+    def top(self, token, top_type='tracks', offset=0, limit=100, ids=None):
+        url_suffix = '/me/top/' + top_type
+        params = {
+            "offset": offset,
+            "limit": limit,
+        }
+        response = self.make_call(
+            requests.get, url_suffix, headers=self.headers(token), params=params
         )
+        if ids:
+            return FormatTopTracks.format_top_tracks_ids(response)
+        return FormatTopTracks.format_top_tracks(response)
+
+    def audio_features(self, token, track_ids):
+        url_suffix = '/audio-features'
+        params = {
+            "ids": str(track_ids).replace('[', '').replace(']', '').replace('\'', '').replace(' ', '')
+        }
+        response = self.make_call(
+            requests.get, url_suffix, headers=self.headers(token), params=params
+        )
+        return FormatFeaturesTracks.format_tracks_features(response)
