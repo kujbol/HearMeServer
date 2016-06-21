@@ -15,5 +15,4 @@ class MessagesPreviewList(SequenceSchema):
 
 
 class MessagesPreview(MappingSchema):
-    conversations_count = SchemaNode(Integer())
     conversations_preview = MessagesPreviewList()

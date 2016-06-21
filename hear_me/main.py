@@ -10,6 +10,7 @@ from hear_me.resources.spotify import SpotifyConnectorFactory
 from hear_me.settings import defaults as config
 
 # BluePrints
+from hear_me.views.message import message
 from hear_me.views.messages_preview import messages
 from hear_me.views.user import user
 from hear_me.views.settings import settings
@@ -28,6 +29,7 @@ def register_blueprints(app):
     app.register_blueprint(settings)
     app.register_blueprint(next_user)
     app.register_blueprint(messages)
+    app.register_blueprint(message)
 
 
 def init_services(settings):

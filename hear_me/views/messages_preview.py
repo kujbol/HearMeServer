@@ -4,7 +4,6 @@ from flask import Blueprint, g, jsonify
 
 from hear_me.auth.auth import auth
 from hear_me.libs.services import service_registry
-from hear_me.models.message import Conversation, Message
 from hear_me.models.user import User
 from hear_me.views.schemas.messages_preview import (
     MessagePreview,
@@ -26,14 +25,18 @@ def get_messages():
             for user_id, messages in user.messages.items()
         ]
     }
-    result['conversations_count'] = len(result['conversations_preview'])
     return jsonify(schema.serialize(result))
 
 
 def prepare_message_preview(user_id, messages):
     with service_registry.services.mongo_connector:
-        user = User.get_by_id(user_id)
-        result = user.to_dict()
+        user_preview = User.get_by_id(user_id)
         if messages:
-            result['last_message'] = messages.messages[0].text[:50]
-        return message_preview_schema.serialize(result)
+            return message_preview_schema.serialize({
+                '_id': user_preview.id,
+                'last_message': messages[0].text[:50],
+                'display_name': user_preview.display_name or user_preview.id,
+                'image_url': user_preview.image_url
+            })
+        else:
+            return message_preview_schema.serialize(user_preview.to_dict())

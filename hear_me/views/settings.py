@@ -1,7 +1,7 @@
 from flask import Blueprint, g, jsonify
 
 from hear_me.auth.auth import auth
-from hear_me.libs.schema import deserialize_schema
+from hear_me.libs.schema import deserialize_schema_wrapper
 from hear_me.models.user import SearchPreferences, SearchSettings
 from hear_me.views.schemas.settings import SettingsSchema
 
@@ -18,7 +18,7 @@ def get_settings():
 
 @settings.route('/v1/settings', methods=['POST'])
 @auth.authenticate
-@deserialize_schema(schema)
+@deserialize_schema_wrapper(schema)
 def post_settings(deserialized):
     user = g.user
     search_settings = deserialized['search_settings']
@@ -33,3 +33,4 @@ def post_settings(deserialized):
     user.save()
 
     return jsonify(schema.serialize(user.to_dict()))
+

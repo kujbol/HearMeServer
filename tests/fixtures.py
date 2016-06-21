@@ -73,7 +73,7 @@ def fixt_square(fixt_music):
 def fixt_user(fixt_search_settings, fixt_search_preferences, fixt_square):
     return User(
         id='kujbol',
-        visible_name="Kuba Kmiotek",
+        display_name="Kuba Kmiotek",
         birth_date=datetime(1994, 11, 6, 0, 0, 0),
         image_url='http://some.fake.url/img.jpg',
         country='PL',
@@ -82,7 +82,6 @@ def fixt_user(fixt_search_settings, fixt_search_preferences, fixt_square):
         search_settings=fixt_search_settings,
         is_active=False,
         square=fixt_square,
-        friends=[],
         messages={},
     )
 

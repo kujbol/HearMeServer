@@ -13,11 +13,11 @@ from mongoengine import (
     PULL,
     ReferenceField,
     StringField,
-)
+    Q, DoesNotExist)
 
 from hear_me.libs.services import service_registry
 from hear_me.models.base import BaseDocument
-from hear_me.models.message import Conversation
+from hear_me.models.message import Message
 from hear_me.models.music import Music, MusicType
 from hear_me.utils.i18n import available_languages
 
@@ -88,7 +88,6 @@ class Square(EmbeddedDocument):
         )
 
 
-
 class User(BaseDocument):
     id = StringField(primary_key=True)
     display_name = StringField()
@@ -107,8 +106,11 @@ class User(BaseDocument):
     is_active = BooleanField(required=True)
 
     # Music
-    friends = ListField(ReferenceField('self', reverse_delete_rule=PULL))
-    messages = MapField(EmbeddedDocumentField(Conversation))
+    matched = ListField(StringField())
+    showed = ListField(StringField())
+    to_be_showed = ListField(StringField())
+    liked = ListField(StringField())
+    messages = MapField(ListField(EmbeddedDocumentField(Message)))
     square = EmbeddedDocumentField(Square)
 
     meta = {
@@ -125,12 +127,25 @@ class User(BaseDocument):
         self.is_active = True
 
     def get_next_user_id(self):
-        # TODO change this mock for something reasonable -> send data to elastic
         with service_registry.services.mongo_connector:
-            for user in User.objects():
-                if user.id != self.id:
-                    return user.id
+            if self.to_be_showed:
+                to_be_showed_id = self.to_be_showed[0]
+                self.update(pull__to_be_showed=to_be_showed_id)
+                return to_be_showed_id
+            user = User.objects(
+                id__nin=self.showed,
+                id__ne=self.id
+            )
+            if user:
+                return user[0].id
             return self.id
+
+    def match_user(self, matched_user):
+        if matched_user.id not in self.liked:
+            self.liked.append(matched_user.id)
+
+        self.messages[matched_user.id] = []
+        self.matched.append(matched_user.id)
 
     @classmethod
     def from_spotify(cls, spotify_data):
